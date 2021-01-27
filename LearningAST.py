@@ -32,4 +32,4 @@ class StartObfuscator():
         NodeVisitor().visit(tree_node)
 
         #print(codegen.to_source(tree_node))
-print(....__class__().__str__())
+
