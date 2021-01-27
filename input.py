@@ -1,10 +1,4 @@
-def foo():
-    print("hello world")
-def foo2():
-    print("hello world")
-def foo3():
-    print("hello world")
+def hello():
+    return 'Hey'
 
-foo2()
-
-foo3()
+print(hello())

@@ -40,7 +40,7 @@ class Obfuscator():
     def JunkCode(self):
         pass
     def RandomList(self):
-        pass
+        CodeList =uuuu
     def RandomizeAlphabetString(self, s):
         xx = list()
         finalstr = ''
