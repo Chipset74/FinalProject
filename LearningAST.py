@@ -25,7 +25,8 @@ class NodeTransformer(ast.NodeTransformer):
 class Obfuscator():
     def __init__(self, typ, inpt):
         if(typ == 'str'):
-            self.RandomizeAlphabetString(inpt)
+            Output = self.RandomizeAlphabetString(inpt)
+            self.RandomList(Output)
         elif(typ == 'func'):
             self.FunctionEncrypt(inpt)
         self.output = 'a'
@@ -39,8 +40,15 @@ class Obfuscator():
         pass
     def JunkCode(self):
         pass
-    def RandomList(self):
-        CodeList =uuuu
+    def RandomList(self, s):
+        DictofVars = {}
+        Split_Data = s.split('+')
+        for x in range(len(Split_Data)):
+            DictofVars[x] = Split_Data[x]
+            Split_Data[x] = s.replace(Split_Data[x], str(x))
+        print(DictofVars)
+        print(Split_Data)
+        return DictofVars
     def RandomizeAlphabetString(self, s):
         xx = list()
         finalstr = ''
@@ -49,7 +57,7 @@ class Obfuscator():
         for x in s:
             print(xx.index(x))
             finalstr += 'a[' + str(random.randint(0,99)) + '][' + str(xx.index(x)) + ']+'
-        print(finalstr[:-1])
+        return(finalstr[:-1])
 
 class StartObfuscator():
     def __init__(self):
