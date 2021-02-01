@@ -3,7 +3,6 @@ import codegen
 import base64
 import random
 import string
-from Parser import ParseFile
 
 class Obfuscator():
     def __init__(self, InputString):
@@ -27,9 +26,9 @@ class Obfuscator():
             Dictionary[CharIndex] = ('a' + Char).replace('aa','a')
             Call+=DictionaryVariable + '[{}]+'.format(self.RandomMathEquation(Chars.index(Char), 10))
         StringifyedDictionary = DictionaryVariable + '=' + str(Dictionary).replace("'",'')
-        print(StringifyedDictionary + '\n')
-        print(Call[:-1])
-        return (Call[:-1])
+        #print(StringifyedDictionary + '\n')
+        #print(Call[:-1])
+        return ([StringifyedDictionary, Call[:-1]])
 
     def RandomMathEquation(self, InputNum, LoopAmount):
         #print("Input Number: " + str(InputNum))
@@ -58,9 +57,3 @@ class Obfuscator():
             else:
                 Looped = 0
                 RandomEquationFinal = ''
-                
-def start():
-    ParsedText = ParseFile('input.py')
-    ob = Obfuscator("\nYou understand binary search really well!")
-
-start()

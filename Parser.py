@@ -1,6 +1,7 @@
 import json
 from ast import parse
 from ast2json import ast2json
+from Obfuscator import Obfuscator
 
 class ParseFile():
     def __init__(self, file):
@@ -18,11 +19,17 @@ class ParseFile():
                     for VarNames in x['targets']:
                         Value = x['value']['value']
                         print('Variable: {}, Value: {}, ValueType: {}, LineNumber: {}'.format(VarNames['id'], Value, type(Value), x['value']['lineno']))
+                        if(type(Value) == str):
+                            Obfuscated = Obfuscator(Value).Output
+                            print('\nObfuscated\n------------------\nDictionary: {}\n\nCall: {}\n------------------\n'.format(Obfuscated[0], Obfuscated[1]))
                 elif(x['targets'][0]['_type'] == 'Tuple'):
                     a = 0
                     for VarNames in (x['targets'][0]['elts']):
                         Value = x['value']['elts'][a]['value']
                         print('Tuple Variable: {}, Value: {}, ValueType: {}, LineNumber: {}'.format(VarNames['id'], Value, type(Value), x['value']['lineno']))
+                        if(type(Value) == str):
+                            Obfuscated = Obfuscator(Value).Output
+                            print('\nObfuscated\n------------------\nDictionary: {}\n\nCall: {}\n------------------\n'.format(Obfuscated[0], Obfuscated[1]))
                         a+=1
 
     def ReadFile(self,File):
