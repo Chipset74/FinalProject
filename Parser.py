@@ -14,8 +14,16 @@ class ParseFile():
     def ParseAST(self,astdump):
         for x in astdump:
             if(x['_type'] == 'Assign'):
-                for VarNames in x['_type']['targets']:
-                    print(VarNames['id'])
+                if(x['targets'][0]['_type'] == 'Name'):
+                    for VarNames in x['targets']:
+                        Value = x['value']['value']
+                        print('Variable: {}, Value: {}, ValueType: {}, LineNumber: {}'.format(VarNames['id'], Value, type(Value), x['value']['lineno']))
+                elif(x['targets'][0]['_type'] == 'Tuple'):
+                    a = 0
+                    for VarNames in (x['targets'][0]['elts']):
+                        Value = x['value']['elts'][a]['value']
+                        print('Tuple Variable: {}, Value: {}, ValueType: {}, LineNumber: {}'.format(VarNames['id'], Value, type(Value), x['value']['lineno']))
+                        a+=1
 
     def ReadFile(self,File):
         with open(File, 'r') as f:

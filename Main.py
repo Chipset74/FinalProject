@@ -19,9 +19,8 @@ class Obfuscator():
     
     def RandomDictionary(self, s):
         Chars = s.split('+a')
-        Dictionary = {}
+        Dictionary,Call = {},''
         DictionaryVariable = 'yes'
-        Call = ''
         #print(s)
         for Char in Chars:
             CharIndex = self.RandomMathEquation(Chars.index(Char), 10)
@@ -47,7 +46,7 @@ class Obfuscator():
                     Looped+=1
                     RandomEquationFinal += RandomEquationInput
             EvaledEquation = eval(RandomEquationFinal[1:])
-            if(EvaledEquation < InputNum and EvaledEquation > InputNum-10):   
+            if(EvaledEquation < InputNum and EvaledEquation > InputNum-10): # Finds an equation that is within 10 numbers of the input (makes it looks more random) 
                 GetRemainder = eval(str(InputNum) + '-(' + RandomEquationFinal[1:] + ')') 
                 #print('Found Equation:' + str(EvaledEquation), RandomEquationFinal[1:])
                 #print('Remainder:' + str(GetRemainder))

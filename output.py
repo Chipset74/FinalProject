@@ -7,5 +7,11 @@ def foo2():
 def foo3():
     print("nah")
 
-a = 'hey'
+a = 'test'
 print(a)
+b,c,d='a','b','c'
+test = True
+Fals = False
+def testing():
+    a = 'false'
+    print(a)
