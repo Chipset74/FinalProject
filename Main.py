@@ -3,6 +3,7 @@ import codegen
 import base64
 import random
 import string
+from Parser import ParseFile
 
 class Obfuscator():
     def __init__(self, InputString):
@@ -19,7 +20,7 @@ class Obfuscator():
     def RandomDictionary(self, s):
         Chars = s.split('+a')
         Dictionary = {}
-        DictionaryVariable = ''
+        DictionaryVariable = 'yes'
         Call = ''
         #print(s)
         for Char in Chars:
@@ -60,10 +61,7 @@ class Obfuscator():
                 RandomEquationFinal = ''
                 
 def start():
-    with open('input.py', 'r') as f:
-        expr = f.read()
-        #print(expr)
-
-    ob = Obfuscator("Hey, My name is billy bob joe")
+    ParsedText = ParseFile('input.py')
+    ob = Obfuscator("\nYou understand binary search really well!")
 
 start()
