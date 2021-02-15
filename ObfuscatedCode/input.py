@@ -1,2 +1,2 @@
-test = 'test'
-print(test)
+hey = 'test'
+print(hey)
