@@ -14,26 +14,30 @@ class Obfuscator():
         xx,finalstr = [],''
         [xx.append(x) for x in string.printable]
         for x in s:
-            finalstr += str('a[{}][{}]+'.format(self.random_math_equation(random.randint(0,99), 30), self.random_math_equation(xx.index(x), 30)))
+            finalstr += str('a[{}][{}]+'.format(self.random_math_equation(random.randint(0,99), 6), self.random_math_equation(xx.index(x), 6)))
         return(finalstr[:-1])
     
     def override_native_methods(self, Method) -> str:
         if Method == print:
             RandomString = ''.join([random.choice(string.ascii_letters) for _ in range(10)])
-            return "{}=print\n".format(RandomString)
+            return [RandomString, "{}=print\n".format(RandomString)]
 
     def random_dictionary(self, s: str) -> list:
-        Chars = s.split('+a')
-        Dictionary,Call = {},''
-        DictionaryVariable = '_0x' + str(random.randint(0000,99999999))
-        #print(s)
-        for Char in Chars:  
-            CharIndex = self.random_math_equation(Chars.index(Char), 30)
-            Dictionary[CharIndex] = ('a' + Char).replace('aa','a')
-            Call+=DictionaryVariable + '[{}]+'.format(self.random_math_equation(Chars.index(Char), 30))
-        StringifyedDictionary = DictionaryVariable + '=' + str(Dictionary).replace("'",'')
-        #print(StringifyedDictionary + '\n')
-        #print(Call[:-1])
+        DictionaryNames = []
+        StringifyedDictionary= ''
+        for x in range(15):
+            Chars = s.split('+a')
+            Dictionary,Call = {},''
+            DictionaryVariable = '_0x' + str(random.randint(00000,99999999))
+            DictionaryNames.append(DictionaryVariable)
+            #print(s)
+            for Char in Chars:  
+                CharIndex = self.random_math_equation(Chars.index(Char), 6)
+                Dictionary[CharIndex] = ('a' + Char).replace('aa','a')
+                Call+=random.choice(DictionaryNames) + '[{}]+'.format(self.random_math_equation(Chars.index(Char), 6))
+            StringifyedDictionary += DictionaryVariable + '=' + str(Dictionary).replace("'",'') + '\n'
+            #print(StringifyedDictionary + '\n')
+            #print(Call[:-1])
         return [StringifyedDictionary, Call[:-1]]
 
     def random_math_equation(self, InputNum: int, LoopAmount: int) -> str:
@@ -59,13 +63,11 @@ class Obfuscator():
                     RandomEquationFinal = RandomEquationFinal[1:] + '+' + str(GetRemainder)
                     if eval(RandomEquationFinal) == InputNum:
                         FoundEquation = True
-                        #print('Final Working Equation: ' + RandomEquationFinal)
+                        print('Final Working Equation: ' + RandomEquationFinal)
                         return RandomEquationFinal
                 else:
                     Looped = 0
                     RandomEquationFinal = ''
         except:
             print("Something Messed Up")
-            return 'We messed up somewhere'
-
-o = Obfuscator('s')
+            return None

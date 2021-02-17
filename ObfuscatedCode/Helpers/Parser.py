@@ -28,7 +28,8 @@ class ParseFile():
                             ReplaceItems.append([
                                 Obfuscated[0], Obfuscated[1], 
                                 x['value']['lineno'], VarNames['id']])
-
+                        elif type(Value) == bool:
+                            pass
                 elif x['targets'][0]['_type'] == 'Tuple':
                     a = 0
                     for VarNames in (x['targets'][0]['elts']):
@@ -41,18 +42,31 @@ class ParseFile():
             elif x['_type'] == 'Expr': #Methods
                 Method = x['value']['func']['id']
                 if Method != None:
-                    Obfuscated = Obfuscator(eval(str(Method))).Output # Super unsafe and bad
-                    print(Obfuscated)
-
+                    if Method == "print":
+                        MethodsObfuscated = Obfuscator(eval(str(Method))).Output # Super unsafe and bad
+                        print(MethodsObfuscated)
+                        if(x['value']['args'][0]['_type'] == 'Constant'):
+                            Obfuscated = Obfuscator(x['value']['args'][0]['value']).Output
+                            Obfuscated[1] = '{}{}({})'.format(MethodsObfuscated[1], MethodsObfuscated[0], Obfuscated[1])
+                            ReplaceItems.append([
+                                Obfuscated[0], Obfuscated[1], 
+                                x['value']['func']['lineno'], None
+                            ])
+                
             elif(x['_type'] == 'FunctionDef'):
                 pass
+
         self.replace_strings(ReplaceItems)
 
     def replace_strings(self, ReplaceItems: list):
+        x = 1 
         with open(self.file, 'r') as f:
             lines = f.readlines()
         for VarArray in ReplaceItems:
-            lines[VarArray[2]-1] = VarArray[0] + '\n' + VarArray[3] + '=' + VarArray[1] + '\n'
+            if VarArray[3] != None:
+                lines[VarArray[2]-x] = VarArray[0] + '\n' + VarArray[3] + '=' + VarArray[1] + '\n'
+            else:
+                lines[VarArray[2]-x] = VarArray[0] + '\n' + VarArray[1] + '\n'
         lines[0] = 'import string;a=[];[[a.append(string.printable)] for x in string.printable]\n' + lines[0] 
         with open('./Results/Output.py', 'w') as f:
             f.writelines(lines)
