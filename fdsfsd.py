@@ -1,0 +1,2 @@
+ouifasufifasg = "hey"
+print(ouifasufifasg)
