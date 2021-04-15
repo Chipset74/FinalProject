@@ -5,7 +5,7 @@ class Obfuscator():
     def __init__(self, InputString, ColOffset) -> str:
         if InputString != None:
             if callable(InputString):
-                self.Output = self.override_native_methods(InputString)
+                self.Output = self.override_native_methods(InputString, ColOffset)
             elif type(InputString) == str:
                 self.Output = self.random_dictionary(InputString, ColOffset)
             elif type(InputString) == int:
@@ -26,10 +26,13 @@ class Obfuscator():
             finalstr += str('a[{}][{}]+'.format(self.random_math_equation(random.randint(0,99), 6), self.random_math_equation(xx.index(x), 6)))
         return(finalstr[:-1])
     
-    def override_native_methods(self, Method) -> str:
+    def override_native_methods(self, Method,ColOffset) -> str:
+        spacer = ''
+        for _ in range(ColOffset):
+            spacer+=' '
         if Method == print:
             RandomString = ''.join([random.choice(string.ascii_letters) for _ in range(10)])
-            return [RandomString, "{}=print\n".format(RandomString)]
+            return [spacer + RandomString, "{}=print\n".format(RandomString)]
 
     def random_dictionary(self, s: str, ColOffset: int) -> list:
         DictionaryNames = []
@@ -50,7 +53,7 @@ class Obfuscator():
             StringifyedDictionary += DictionaryVariable + '=' + str(Dictionary).replace("'",'') + '\n'
             #print(StringifyedDictionary + '\n')
             #print(Call[:-1])
-        return [StringifyedDictionary, Call[:-1]]
+        return [StringifyedDictionary, Call[:-1].replace(spacer, '')]
 
     def random_math_equation(self, InputNum: int, LoopAmount: int) -> str:
         try:

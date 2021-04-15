@@ -18,6 +18,20 @@ class ParseFile():
         self.parse_AST(ParsedASTJSON['body'])
     
     def doStringObfiuscation(self, x):
+        if x['_type'] == 'Expr': #Methods
+            Method = x['value']['func']['id']
+            if Method != None:
+                if Method == "print":
+                    MethodsObfuscated = Obfuscator(eval(str(Method)), x['col_offset']).Output # Super unsafe and bad
+                    print(MethodsObfuscated)
+                    if(x['value']['args'][0]['_type'] == 'Constant'):
+                        Obfuscated = Obfuscator(x['value']['args'][0]['value'], x['col_offset']).Output
+                        Obfuscated[1] = '{}{}({})'.format(MethodsObfuscated[1], MethodsObfuscated[0], Obfuscated[1])
+                        self.ReplaceItems.append([
+                            Obfuscated[0], Obfuscated[1], 
+                            x['value']['func']['lineno'], None,
+                            None, x['col_offset']
+                        ])
         if(x['_type'] == 'Assign'): #Strings
             if(x['targets'][0]['_type'] == 'Name'):
                 for VarNames in x['targets']:
@@ -86,27 +100,15 @@ class ParseFile():
 
     def parse_AST(self,astdump: str) -> str:
         with open('a.json', 'w') as x:x.write(str(json.dumps(astdump, indent=4)))
-        for x in astdump:
-            if x['_type'] == 'Expr': #Methods
-                Method = x['value']['func']['id']
-                if Method != None:
-                    if Method == "print":
-                        MethodsObfuscated = Obfuscator(eval(str(Method)), x['col_offset']).Output # Super unsafe and bad
-                        print(MethodsObfuscated)
-                        if(x['value']['args'][0]['_type'] == 'Constant'):
-                            Obfuscated = Obfuscator(x['value']['args'][0]['value'], x['col_offset']).Output
-                            Obfuscated[1] = '{}{}({})'.format(MethodsObfuscated[1], MethodsObfuscated[0], Obfuscated[1])
-                            self.ReplaceItems.append([
-                                Obfuscated[0], Obfuscated[1], 
-                                x['value']['func']['lineno'], None,
-                                None, x['col_offset']
-                            ])
 
-            elif(x['_type'] == 'FunctionDef'): #Funcs
+        thingsToObfuscate = ['FunctionDef', 'If', 'For']
+
+        for x in astdump:
+            if(x['_type'] in thingsToObfuscate): #Funcs
                 Body = x["body"]
                 for x in Body:
                     self.doStringObfiuscation(x)
-                    #print(x["value"]["args"][0]["value"])
+
             self.doStringObfiuscation(x)
         self.replace_strings(self.ReplaceItems)
 

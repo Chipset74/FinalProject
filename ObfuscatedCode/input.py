@@ -21,6 +21,11 @@ Check4()
 Test4 = 10
 if(Test4>9 and Test4<11):
     print("Fifth Check Passed")
+else:
+    print("seventh check passed")
 
+for x in range(1):
+    print("eigth check passed")
+    
 check6 = {'test':'tes',"teshoihstieo":'est',"tes":2,"key":'Sixth Check Passed', 0:1}
 print(check6['key'])
