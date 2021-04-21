@@ -1,24 +1,16 @@
-#Testing File For Obfuscator
+import random
 
-Test = "First check Passed"
-print(Test)
+state = {}
+def rnd():
+    random.setstate((3,tuple(state),None)) #sets the state to itself
+    for states in range(len(state)):
+        if states == len(state)-1: break
+        choice = random.randint(0,1)
+        if choice == 1: state[states]=state[states]+random.randint(0,10)
+        elif choice == 0: state[states]=state[states]-random.randint(0,10)
+    random.setstate((3,tuple(state),None))
+    return random.randint(0,10)
 
-Test2 = False
-if Test2 == False:
-    print("Second Check Passed")
-
-Test3 = ['tut',' random', "Third Check Passed"]
-print(Test3[2])
-
-def Check4():
-    print("Fourth Check Passed")
-    print("Fourth Check Passed")
-
-Check4()
-
-Test4 = 10
-if(Test4>9 and Test4<11):
-    print("Fifth Check Passed")
-
-check6 = {'test':'tes',"teshoihstieo":'est',"tes":2,"key":'Sixth Check Passed', 0:1}
-print(check6['key'])
+for x in range(10):
+    print(state)
+    print(rnd())
