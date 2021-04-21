@@ -2,7 +2,8 @@ import random
 import string
 
 class Obfuscator():
-    def __init__(self, InputString, ColOffset) -> str:
+    def __init__(self, InputString, ColOffset, State) -> str:
+        self.State = State
         if InputString != None:
             if callable(InputString):
                 self.Output = self.override_native_methods(InputString, ColOffset)
@@ -19,6 +20,15 @@ class Obfuscator():
                     finalList.append(ObfuscatedElement)
                 self.Output = finalList
 
+    def rnd(self):
+        for states in range(len(self.State)):
+            if states == len(self.State)-1: break
+            choice = random.randint(0,1)
+            if choice == 1: self.State[states]=self.State[states]+random.randint(0,10)
+            elif choice == 0: self.State[states]=self.State[states]-random.randint(0,10)
+        random.setstate((3,tuple(self.State),None))
+        return random.randint(0,10)
+
     def randomize_alphabet_string(self, s: str):
         xx,finalstr = [],''
         [xx.append(x) for x in string.printable]
@@ -31,7 +41,7 @@ class Obfuscator():
         for _ in range(ColOffset):
             spacer+=' '
         if Method == print:
-            RandomString = ''.join([random.choice(string.ascii_letters) for _ in range(10)])
+            RandomString = '_0x' + str(random.randint(00000,99999999))
             return [spacer + RandomString, "{}=print\n".format(RandomString)]
 
     def random_dictionary(self, s: str, ColOffset: int) -> list:
@@ -43,7 +53,7 @@ class Obfuscator():
         for x in range(15):
             Chars = self.randomize_alphabet_string(s).split('+a')
             Dictionary,Call = {},''
-            DictionaryVariable = spacer + '_0x' + str(random.randint(00000,99999999))
+            DictionaryVariable = spacer + 'shee' + ''.join(["e" for x in range(random.randint(0,20))]) +'sh'
             DictionaryNames.append(DictionaryVariable)
             #print(s)
             for Char in Chars:  
@@ -66,25 +76,38 @@ class Obfuscator():
                     RandomNumber = random.randint(1,11)
                     if(RandomNumber == 1):
                         RandomNumber=True
+                    if(RandomNumber%2 == 0):
+                        f = '~'
+                        for x in range(RandomNumber):
+                            f+='~~'
+                        RandomNumber =  f + str(RandomNumber)
+                    else:
+                        f = '~~'
+                        for x in range(RandomNumber):
+                            f+='~~'
+                        RandomNumber =  f + str(RandomNumber)
+
                     RandomEquationInput = random.choice(Operaters) + str(RandomNumber)
                     RandomEquation = str(InputNum) + RandomEquationInput
                     Evaled = eval(RandomEquation)
                     if type(Evaled) == int:
                         Looped+=1
                         RandomEquationFinal += RandomEquationInput
+                RandomEquationFinal = RandomEquationFinal
                 EvaledEquation = eval(RandomEquationFinal[1:])
-                if EvaledEquation < InputNum and EvaledEquation > InputNum-20: # Finds an equation that is within 10 numbers of the input (makes it looks more random) 
+                if EvaledEquation < InputNum and EvaledEquation > InputNum-40: # Finds an equation that is within 10 numbers of the input (makes it looks more random) 
                     GetRemainder = eval(str(InputNum) + '-(' + RandomEquationFinal[1:] + ')') 
                     #print('Found Equation:' + str(EvaledEquation), RandomEquationFinal[1:])
                     #print('Remainder:' + str(GetRemainder))
-                    RandomEquationFinal = RandomEquationFinal[1:] + '+' + str(GetRemainder)
-                    if eval(RandomEquationFinal) == InputNum:
-                        FoundEquation = True
-                        #print('Final Working Equation: ' + RandomEquationFinal)
-                        return RandomEquationFinal
+                    RandomEquationFinal = "(" + RandomEquationFinal[1:] + '+' + str(GetRemainder) + ")"
+                   # if eval(RandomEquationFinal) == InputNum:
+                    FoundEquation = True
+                    #print('Final Working Equation: ' + RandomEquationFinal)
+                    return RandomEquationFinal
                 else:
                     Looped = 0
                     RandomEquationFinal = ''
-        except:
+        except Exception as e:
             print("Something Messed Up")
+            print(e)
             return None
